@@ -1,9 +1,10 @@
 # Updated requirements with production dependencies
-fastapi==0.115.6
-uvicorn[standard]==0.34.0
-pydantic==2.10.5
+fastapi>=0.109.0
+uvicorn[standard]>=0.27.0
+pydantic>=2.6.0
+pydantic-settings>=2.1.0
 python-multipart==0.0.20
-sqlalchemy==2.0.36
+sqlalchemy>=2.0.25
 email-validator==2.3.0
 
 # PostgreSQL support
