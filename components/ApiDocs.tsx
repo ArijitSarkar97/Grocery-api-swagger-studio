@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { ApiEndpoint } from '../types';
 import { API_DEFINITIONS } from '../constants';
 import { mockApi } from '../services/mockApi';
+import { getBaseUrl } from '../config/api';
 
 const MethodBadge: React.FC<{ method: string }> = ({ method }) => {
   const colors: Record<string, string> = {
@@ -124,10 +125,10 @@ export const ApiDocs: React.FC = () => {
             <span className="font-semibold text-gray-700 mr-2">Base URL:</span>
             <div className="inline-flex items-center gap-2 bg-blue-50 px-4 py-2 rounded-lg border border-blue-200">
               <i className="fas fa-server text-blue-500"></i>
-              <code className="text-blue-700 font-mono font-semibold">http://localhost:8000</code>
+              <code className="text-blue-700 font-mono font-semibold">{getBaseUrl()}</code>
               <button
                 onClick={() => {
-                  navigator.clipboard.writeText('http://localhost:8000');
+                  navigator.clipboard.writeText(getBaseUrl());
                   alert('✓ Base URL copied!');
                 }}
                 className="ml-2 text-blue-500 hover:text-blue-700 transition-colors"
@@ -174,7 +175,7 @@ export const ApiDocs: React.FC = () => {
                         <button
                           onClick={(e) => {
                             e.stopPropagation();
-                            const fullUrl = `http://localhost:8000${endpoint.path}`;
+                            const fullUrl = `${getBaseUrl()}${endpoint.path}`;
                             navigator.clipboard.writeText(fullUrl);
                             alert(`✓ Copied: ${fullUrl}`);
                           }}

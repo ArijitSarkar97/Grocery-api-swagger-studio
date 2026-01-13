@@ -1,5 +1,7 @@
 // Real API service for calling the FastAPI backend
-const API_BASE_URL = 'http://localhost:8000/api/v1';
+import { API_CONFIG } from '../config/api';
+
+const API_BASE_URL = API_CONFIG.API_URL;
 
 export interface Product {
     id: number;
