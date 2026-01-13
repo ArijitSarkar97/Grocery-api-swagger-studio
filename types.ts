@@ -48,6 +48,7 @@ export interface ApiEndpoint {
 }
 
 export enum ViewMode {
+  HOME = 'HOME',
   DOCS = 'DOCS',
   CODE = 'CODE',
   DEMO = 'DEMO',

@@ -3,10 +3,11 @@ import { ApiDocs } from './components/ApiDocs';
 import { CodeViewer } from './components/CodeViewer';
 import { LiveStore } from './components/LiveStore';
 import { Schemas } from './components/Schemas';
+import { HomePage } from './components/HomePage';
 import { ViewMode } from './types';
 
 export default function App() {
-  const [currentView, setCurrentView] = useState<ViewMode>(ViewMode.DOCS);
+  const [currentView, setCurrentView] = useState<ViewMode>(ViewMode.HOME);
 
   return (
     <div className="min-h-screen bg-background font-sans">
@@ -47,6 +48,7 @@ export default function App() {
         <div className="max-w-7xl mx-auto px-6">
           <nav className="flex gap-1">
             {[
+              { mode: ViewMode.HOME, label: 'Home', icon: 'home' },
               { mode: ViewMode.DOCS, label: 'API Documentation', icon: 'book' },
               { mode: ViewMode.SCHEMA, label: 'Schemas', icon: 'database' },
               { mode: ViewMode.CODE, label: 'Backend Code', icon: 'code' },
@@ -56,8 +58,8 @@ export default function App() {
                 key={mode}
                 onClick={() => setCurrentView(mode)}
                 className={`flex items-center gap-2 px-4 py-3 text-sm font-medium border-b-2 transition-colors ${currentView === mode
-                    ? 'border-swagger-post text-swagger-post'
-                    : 'border-transparent text-gray-600 hover:text-gray-800 hover:border-gray-300'
+                  ? 'border-swagger-post text-swagger-post'
+                  : 'border-transparent text-gray-600 hover:text-gray-800 hover:border-gray-300'
                   }`}
               >
                 <i className={`fas fa-${icon}`}></i>
@@ -70,6 +72,7 @@ export default function App() {
 
       {/* Main Content */}
       <main className="min-h-screen">
+        {currentView === ViewMode.HOME && <HomePage setView={setCurrentView} />}
         {currentView === ViewMode.DOCS && <ApiDocs />}
         {currentView === ViewMode.CODE && <CodeViewer />}
         {currentView === ViewMode.DEMO && <LiveStore />}
