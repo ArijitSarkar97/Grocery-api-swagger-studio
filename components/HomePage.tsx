@@ -68,13 +68,6 @@ export const HomePage: React.FC<{ setView?: (view: ViewMode) => void }> = ({ set
                                         <p className="text-sm text-gray-600">Explore data models and structures</p>
                                     </div>
                                 </div>
-                                <div className="flex items-start gap-3">
-                                    <i className="fas fa-check-circle text-green-500 mt-1"></i>
-                                    <div>
-                                        <p className="font-semibold text-gray-800">AI Recipe Suggestions</p>
-                                        <p className="text-sm text-gray-600">Powered by Google Gemini</p>
-                                    </div>
-                                </div>
                             </div>
 
                             <a
