@@ -11,8 +11,11 @@ from database import get_db, CustomerDB
 # Password hashing
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
-# Security scheme
+# Security scheme (required for authenticated endpoints)
 security = HTTPBearer()
+
+# Optional security scheme (for public endpoints)
+optional_security = HTTPBearer(auto_error=False)
 
 def verify_password(plain_password: str, hashed_password: str) -> bool:
     """Verify a password against its hash."""
@@ -62,13 +65,19 @@ def get_current_user(
 
 # Optional authentication (for public endpoints)
 def get_current_user_optional(
-    credentials: Optional[HTTPAuthorizationCredentials] = Depends(security),
+    credentials: Optional[HTTPAuthorizationCredentials] = Depends(optional_security),
     db: Session = Depends(get_db)
 ) -> Optional[CustomerDB]:
     """Get current user if authenticated, None otherwise."""
     if credentials is None:
         return None
     try:
-        return get_current_user(credentials, db)
-    except HTTPException:
+        token = credentials.credentials
+        payload = jwt.decode(token, settings.secret_key, algorithms=[settings.algorithm])
+        user_id: int = payload.get("sub")
+        if user_id is None:
+            return None
+        user = db.query(CustomerDB).filter(CustomerDB.id == user_id).first()
+        return user
+    except (JWTError, AttributeError):
         return None
