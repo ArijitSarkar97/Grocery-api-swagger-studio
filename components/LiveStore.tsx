@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { realApi as mockApi } from '../services/realApi'; // Using real API now!
-import { generateRecipeSuggestion } from '../services/gemini';
 import { Product, Order } from '../types';
 
 export const LiveStore: React.FC = () => {
@@ -8,9 +7,6 @@ export const LiveStore: React.FC = () => {
   const [cart, setCart] = useState<{ product: Product, qty: number }[]>([]);
   const [orders, setOrders] = useState<Order[]>([]);
   const [loading, setLoading] = useState(false);
-  const [recipe, setRecipe] = useState<string>("");
-  const [aiLoading, setAiLoading] = useState(false);
-  const [showAiModal, setShowAiModal] = useState(false);
 
   useEffect(() => {
     loadData();
@@ -77,27 +73,14 @@ export const LiveStore: React.FC = () => {
     }
   };
 
-  const askChef = async () => {
-    setAiLoading(true);
-    // Use environment variable if available, else warn
-    const apiKey = process.env.API_KEY;
-    const result = await generateRecipeSuggestion(products, apiKey);
-    setRecipe(result);
-    setAiLoading(false);
-  };
+
 
   return (
     <div className="flex h-full flex-col md:flex-row bg-gray-50">
       {/* Products Panel */}
       <div className="flex-1 p-6 overflow-y-auto">
-        <div className="flex justify-between items-center mb-6">
+        <div className="mb-6">
           <h2 className="text-2xl font-bold text-gray-800">Fresh Inventory</h2>
-          <button
-            onClick={() => { setShowAiModal(true); askChef(); }}
-            className="flex items-center gap-2 bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700 transition"
-          >
-            <i className="fas fa-magic"></i> AI Chef
-          </button>
         </div>
 
         {loading ? (
@@ -198,29 +181,7 @@ export const LiveStore: React.FC = () => {
         </div>
       </div>
 
-      {/* AI Modal */}
-      {showAiModal && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
-          <div className="bg-white rounded-xl shadow-2xl max-w-md w-full p-6 relative">
-            <button onClick={() => setShowAiModal(false)} className="absolute top-4 right-4 text-gray-400 hover:text-gray-600">
-              <i className="fas fa-times"></i>
-            </button>
-            <h3 className="text-xl font-bold mb-4 text-purple-700 flex items-center gap-2">
-              <i className="fas fa-robot"></i> AI Chef Suggestion
-            </h3>
-            {aiLoading ? (
-              <div className="py-8 text-center text-gray-500">
-                <i className="fas fa-circle-notch fa-spin text-2xl mb-2"></i>
-                <p>Analyzing ingredients...</p>
-              </div>
-            ) : (
-              <div className="prose prose-sm text-gray-700">
-                <p className="whitespace-pre-wrap">{recipe}</p>
-              </div>
-            )}
-          </div>
-        </div>
-      )}
+
     </div>
   );
 };
