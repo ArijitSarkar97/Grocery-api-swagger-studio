@@ -1,0 +1,25 @@
+# Updated requirements with production dependencies
+fastapi==0.115.6
+uvicorn[standard]==0.34.0
+pydantic==2.10.5
+python-multipart==0.0.20
+sqlalchemy==2.0.36
+email-validator==2.3.0
+
+# PostgreSQL support
+psycopg2-binary==2.9.10
+
+# Authentication
+python-jose[cryptography]==3.3.0
+passlib[bcrypt]==1.7.4
+
+# Rate limiting
+slowapi==0.1.9
+
+# Logging
+python-json-logger==3.2.1
+
+# Environment variables
+python-dotenv==1.2.1
+
+# CORS

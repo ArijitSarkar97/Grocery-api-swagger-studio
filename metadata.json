@@ -1,0 +1,5 @@
+{
+  "name": "Grocery API & Swagger Studio",
+  "description": "A comprehensive API Developer Portal for the Grocery Store project. Includes an interactive Swagger-style documentation viewer, a live client-side simulation of the API logic, and a code viewer displaying the generated Python/FastAPI backend source code.",
+  "requestFramePermissions": []
+}
