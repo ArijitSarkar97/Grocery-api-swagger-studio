@@ -42,5 +42,4 @@ export const API_CONFIG = {
     }
 };
 
-// Export base URL for components
-export const getBaseUrl = () => API_CONFIG.BASE_URL;
+
