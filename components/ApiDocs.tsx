@@ -115,14 +115,27 @@ export const ApiDocs: React.FC = () => {
         <p className="text-gray-600 mb-4">
           A comprehensive REST API for managing a grocery store with support for products, inventory, orders, and customers.
         </p>
-        <div className="flex gap-4 text-sm">
+        <div className="flex gap-6 text-sm items-center">
           <div>
             <span className="font-semibold text-gray-700">Version:</span>{' '}
             <span className="text-gray-600">1.0.0</span>
           </div>
-          <div>
-            <span className="font-semibold text-gray-700">Base URL:</span>{' '}
-            <code className="bg-gray-100 px-2 py-1 rounded text-xs">http://localhost:8000/api/v1</code>
+          <div className="flex-1">
+            <span className="font-semibold text-gray-700 mr-2">Base URL:</span>
+            <div className="inline-flex items-center gap-2 bg-blue-50 px-4 py-2 rounded-lg border border-blue-200">
+              <i className="fas fa-server text-blue-500"></i>
+              <code className="text-blue-700 font-mono font-semibold">http://localhost:8000</code>
+              <button
+                onClick={() => {
+                  navigator.clipboard.writeText('http://localhost:8000');
+                  alert('✓ Base URL copied!');
+                }}
+                className="ml-2 text-blue-500 hover:text-blue-700 transition-colors"
+                title="Copy base URL"
+              >
+                <i className="fas fa-copy"></i>
+              </button>
+            </div>
           </div>
         </div>
       </div>
