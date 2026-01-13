@@ -159,7 +159,7 @@ export const ApiDocs: React.FC = () => {
               return (
                 <div
                   key={idx}
-                  className={`bg-white border-l-4 ${getBorderColor(endpoint.method)} rounded overflow-hidden transition-all duration-200 ${isExpanded ? 'shadow-lg' : 'shadow hover:shadow-md'
+                  className={`group bg-white border-l-4 ${getBorderColor(endpoint.method)} rounded overflow-hidden transition-all duration-200 ${isExpanded ? 'shadow-lg' : 'shadow hover:shadow-md'
                     }`}
                 >
                   {/* Endpoint Header */}
@@ -169,7 +169,21 @@ export const ApiDocs: React.FC = () => {
                   >
                     <div className="flex items-center gap-4 flex-1">
                       <MethodBadge method={endpoint.method} />
-                      <span className="font-mono text-sm text-gray-700 font-semibold">{endpoint.path}</span>
+                      <div className="flex items-center gap-2">
+                        <span className="font-mono text-sm text-gray-700 font-semibold">{endpoint.path}</span>
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            const fullUrl = `http://localhost:8000${endpoint.path}`;
+                            navigator.clipboard.writeText(fullUrl);
+                            alert(`✓ Copied: ${fullUrl}`);
+                          }}
+                          className="text-gray-400 hover:text-blue-500 transition-colors p-1 opacity-0 group-hover:opacity-100"
+                          title="Copy full URL"
+                        >
+                          <i className="fas fa-copy text-xs"></i>
+                        </button>
+                      </div>
                       <span className="text-gray-500 text-sm hidden md:block">{endpoint.summary}</span>
                     </div>
                     <div className="text-gray-400">
