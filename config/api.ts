@@ -1,9 +1,22 @@
 // API Configuration
 // This will automatically use the correct URL based on environment
 
+// Helper to get the base URL
+export const getBaseUrl = () => {
+    // In production, we prioritize the environment variable
+    if (import.meta.env.VITE_API_BASE_URL) {
+        return import.meta.env.VITE_API_BASE_URL;
+    }
+
+    // Default to production URL if not set (fallback)
+    return 'https://groceryswagger-production.up.railway.app';
+};
+
 export const API_CONFIG = {
-    // Get base URL from environment variable, fallback to localhost
-    BASE_URL: import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000',
+    // Get base URL from environment variable, fallback to production URL
+    get BASE_URL() {
+        return getBaseUrl();
+    },
 
     // API endpoints prefix
     API_PREFIX: '/api/v1',
