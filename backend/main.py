@@ -156,7 +156,7 @@ async def global_exception_handler(request, exc):
     logger.error(f"Global exception: {exc}", exc_info=True)
     return JSONResponse(
         status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-        content={"detail": str(exc)}  # Debugging: Always show error details
+        content={"detail": "Internal server error" if settings.is_production else str(exc)},
     )
 
 # ============================================================================
