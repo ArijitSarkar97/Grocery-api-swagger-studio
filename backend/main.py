@@ -2,7 +2,7 @@
 # Version: 2.0.0
 
 import logging
-from datetime import timedelta
+from datetime import timedelta, datetime
 from typing import List, Optional, Literal
 from contextlib import asynccontextmanager
 
@@ -111,7 +111,7 @@ class Order(BaseModel):
     items: List[OrderItem]
     total_price: float
     status: Literal["pending", "completed", "cancelled"] = "pending"
-    created_at: str
+    created_at: datetime
     class Config:
         from_attributes = True
 
