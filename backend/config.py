@@ -32,6 +32,11 @@ class Settings(BaseSettings):
     @property
     def is_production(self) -> bool:
         return self.environment.lower() == "production"
+    
+    def model_post_init(self, __context):
+        """Fix SQLAlchemy compatibility with Railway's postgres:// URL."""
+        if self.database_url and self.database_url.startswith("postgres://"):
+            self.database_url = self.database_url.replace("postgres://", "postgresql://", 1)
 
 @lru_cache()
 def get_settings() -> Settings:

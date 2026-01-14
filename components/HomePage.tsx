@@ -1,5 +1,6 @@
 import React from 'react';
 import { ViewMode } from '../types';
+import { getBaseUrl } from '../config/api';
 
 export const HomePage: React.FC<{ setView?: (view: ViewMode) => void }> = ({ setView }) => {
     return (
@@ -127,7 +128,7 @@ export const HomePage: React.FC<{ setView?: (view: ViewMode) => void }> = ({ set
                             </div>
 
                             <a
-                                href="http://localhost:8000/docs"
+                                href={`${getBaseUrl()}/docs`}
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 className="block w-full text-center px-6 py-4 bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-xl font-semibold hover:from-blue-600 hover:to-blue-700 transition-all shadow-lg hover:shadow-xl transform hover:-translate-y-1"
@@ -148,7 +149,7 @@ export const HomePage: React.FC<{ setView?: (view: ViewMode) => void }> = ({ set
                         </h3>
                         <div className="grid md:grid-cols-3 gap-4">
                             <a
-                                href="http://localhost:8000/health"
+                                href={`${getBaseUrl()}/health`}
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 className="flex items-center gap-3 p-4 rounded-xl border-2 border-gray-200 hover:border-green-500 hover:bg-green-50 transition-all group"
@@ -161,7 +162,7 @@ export const HomePage: React.FC<{ setView?: (view: ViewMode) => void }> = ({ set
                             </a>
 
                             <a
-                                href="http://localhost:8000/redoc"
+                                href={`${getBaseUrl()}/redoc`}
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 className="flex items-center gap-3 p-4 rounded-xl border-2 border-gray-200 hover:border-purple-500 hover:bg-purple-50 transition-all group"

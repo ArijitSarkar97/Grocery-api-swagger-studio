@@ -72,6 +72,7 @@ def get_db():
 def init_db():
     """Create all tables and seed initial data."""
     import logging
+    from sqlalchemy import text
     logger = logging.getLogger(__name__)
     
     try:
@@ -83,14 +84,14 @@ def init_db():
         try:
             # Check if data already exists
             if db.query(ProductDB).count() == 0:
-                # Add initial products
+                # Add initial products (let DB assign IDs)
                 products = [
-                    ProductDB(id=1, name="Honeycrisp Apple", price=1.25, category="Fruits", inventory=50),
-                    ProductDB(id=2, name="Organic Banana", price=0.35, category="Fruits", inventory=120),
-                    ProductDB(id=3, name="Whole Milk", price=3.99, category="Dairy", inventory=30),
-                    ProductDB(id=4, name="Sourdough Bread", price=5.50, category="Bakery", inventory=15),
-                    ProductDB(id=5, name="Eggs (Dozen)", price=4.25, category="Dairy", inventory=40),
-                    ProductDB(id=6, name="Chicken Breast", price=8.99, category="Meat", inventory=25),
+                    ProductDB(name="Honeycrisp Apple", price=1.25, category="Fruits", inventory=50),
+                    ProductDB(name="Organic Banana", price=0.35, category="Fruits", inventory=120),
+                    ProductDB(name="Whole Milk", price=3.99, category="Dairy", inventory=30),
+                    ProductDB(name="Sourdough Bread", price=5.50, category="Bakery", inventory=15),
+                    ProductDB(name="Eggs (Dozen)", price=4.25, category="Dairy", inventory=40),
+                    ProductDB(name="Chicken Breast", price=8.99, category="Meat", inventory=25),
                 ]
                 db.add_all(products)
                 logger.info("✅ Seeded products")
@@ -98,13 +99,25 @@ def init_db():
             if db.query(CustomerDB).count() == 0:
                 # Add initial customers (without passwords for now)
                 customers = [
-                    CustomerDB(id=1, name="John Doe", email="john@example.com"),
-                    CustomerDB(id=2, name="Jane Smith", email="jane@example.com"),
+                    CustomerDB(name="John Doe", email="john@example.com"),
+                    CustomerDB(name="Jane Smith", email="jane@example.com"),
                 ]
                 db.add_all(customers)
                 logger.info("✅ Seeded customers")
             
             db.commit()
+            
+            # Sync sequences if using PostgreSQL (fixes 500 ID error)
+            if "postgresql" in settings.database_url:
+                try:
+                    logger.info("🔄 Syncing PostgreSQL sequences...")
+                    db.execute(text("SELECT setval('products_id_seq', (SELECT MAX(id) FROM products))"))
+                    db.execute(text("SELECT setval('customers_id_seq', (SELECT MAX(id) FROM customers))"))
+                    db.commit()
+                    logger.info("✅ Sequences synced")
+                except Exception as seq_err:
+                    logger.warning(f"⚠️ Could not sync sequences (might be first run): {seq_err}")
+            
             logger.info("✅ Database initialized with seed data")
         except Exception as e:
             logger.error(f"❌ Error seeding database: {e}")

@@ -45,8 +45,8 @@ app = FastAPI(
     title="Grocery Store API",
     description="Production-ready REST API for grocery store management",
     version="2.0.0",
-    docs_url="/docs" if not settings.is_production else None,
-    redoc_url="/redoc" if not settings.is_production else None,
+    docs_url="/docs",
+    redoc_url="/redoc",
     lifespan=lifespan
 )
 
@@ -156,7 +156,7 @@ async def global_exception_handler(request, exc):
     logger.error(f"Global exception: {exc}", exc_info=True)
     return JSONResponse(
         status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-        content={"detail": "Internal server error" if settings.is_production else str(exc)}
+        content={"detail": str(exc)}  # Debugging: Always show error details
     )
 
 # ============================================================================
@@ -466,7 +466,7 @@ async def root():
         "message": "Welcome to the Grocery Store API",
         "version": "2.0.0",
         "environment": settings.environment,
-        "docs": "/docs" if not settings.is_production else "disabled",
+        "docs": "/docs",
         "database": "PostgreSQL" if "postgresql" in settings.database_url else "SQLite"
     }
 
