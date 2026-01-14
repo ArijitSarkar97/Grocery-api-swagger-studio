@@ -1,29 +1,33 @@
 from datetime import datetime, timedelta
 from typing import Optional
 from jose import JWTError, jwt
-from passlib.context import CryptContext
+import bcrypt
 from fastapi import Depends, HTTPException, status
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from sqlalchemy.orm import Session
 from config import settings
 from database import get_db, CustomerDB
 
-# Password hashing
-pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
-
 # Security scheme (required for authenticated endpoints)
 security = HTTPBearer()
-
-# Optional security scheme (for public endpoints)
+# Optional security for endpoints that might just log the user but not enforce it
 optional_security = HTTPBearer(auto_error=False)
 
 def verify_password(plain_password: str, hashed_password: str) -> bool:
     """Verify a password against its hash."""
-    return pwd_context.verify(plain_password, hashed_password)
+    if not hashed_password:
+        return False
+    # Ensure bytes
+    if isinstance(hashed_password, str):
+        hashed_password = hashed_password.encode('utf-8')
+    
+    return bcrypt.checkpw(plain_password.encode('utf-8'), hashed_password)
 
 def get_password_hash(password: str) -> str:
     """Hash a password."""
-    return pwd_context.hash(password)
+    pwd_bytes = password.encode('utf-8')
+    salt = bcrypt.gensalt()
+    return bcrypt.hashpw(pwd_bytes, salt).decode('utf-8')
 
 def create_access_token(data: dict, expires_delta: Optional[timedelta] = None) -> str:
     """Create a JWT access token."""
